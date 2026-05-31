@@ -463,6 +463,9 @@ bench = false
 # To use a development version of a dependency please use a global override here
 # changing versions in each sub-crate of the workspace is tedious
 [patch.crates-io]
+# Temporary: dirs-sys 0.5.0 resolves windows-sys 0.61 which links CoTaskMemFree to combase.dll (Win8+).
+# Patched to pin windows-sys 0.59 (ole32.dll) for Windows 7. Remove when upstream fixes or Win7 is dropped.
+dirs-sys = { path = "patches/dirs-sys" }
 # Temporary: dirs 6 fix for x86_64-win7-windows-msvc linking (windows-sys 0.48).
 # Remove when upstream fff publishes or merges the dirs bump.
 fff-search = { git = "https://github.com/MrPancakes39/fff.git", branch = "win7-dirs-6" }

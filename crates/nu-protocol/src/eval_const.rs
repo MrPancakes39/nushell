@@ -352,7 +352,7 @@ pub fn get_vendor_autoload_dirs(_engine_state: &EngineState) -> Vec<PathBuf> {
     }
 
     #[cfg(target_os = "windows")]
-    dirs_sys::known_folder(windows_sys::Win32::UI::Shell::FOLDERID_ProgramData)
+    dirs_sys::known_folder_program_data()
         .into_iter()
         .map(into_autoload_path_fn)
         .for_each(&mut append_fn);

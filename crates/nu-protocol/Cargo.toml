@@ -60,10 +60,8 @@ nix = { workspace = true, default-features = false, features = ["signal"] }
 
 [target.'cfg(windows)'.dependencies]
 dirs-sys = { workspace = true }
-# Win32_UI_Shell: FOLDERID_* for dirs_sys::known_folder in eval_const.rs
-# Other Win32_* features: optional os_pipe unification off older windows-sys
+# Win32_* features: optional os_pipe unification off older windows-sys
 windows-sys = { workspace = true, features = [
-  "Win32_UI_Shell",
   "Win32_Foundation",
   "Win32_System_Pipes",
   "Win32_Security",
