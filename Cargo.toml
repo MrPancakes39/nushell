@@ -326,6 +326,8 @@ reedline = { workspace = true, features = ["bashisms"] }
 crossterm = { workspace = true }
 ctrlc = { workspace = true }
 dirs = { workspace = true }
+# Pin home 0.5.11 for Win7: 0.5.12 pulls windows-sys 0.61 which links CoTaskMemFree to combase.dll (Win8+).
+home = "=0.5.11"
 log = { workspace = true }
 lexopt = { workspace = true }
 miette = { workspace = true, features = ["fancy-no-backtrace", "fancy"] }
