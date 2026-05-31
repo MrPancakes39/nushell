@@ -8,6 +8,7 @@
 #   rust-src component: rustup +nightly-2026-04-01 component add rust-src
 #   cargo-xwin and xwin on PATH
 #   curl or wget, and unzip (for bundling less.exe)
+#   objdump and rg (for post-build combase.dll verification)
 #
 # Environment variables:
 #   NIGHTLY_TOOLCHAIN  - rustup toolchain name (default: nightly-2026-04-01)
@@ -133,6 +134,11 @@ check_prerequisites() {
         need_cmd zip
     fi
 
+    if [[ "$CHECK_ONLY" -eq 0 ]]; then
+        need_cmd objdump
+        need_cmd rg
+    fi
+
     echo "Prerequisites OK"
     echo "  nightly toolchain: ${NIGHTLY_TOOLCHAIN}"
     echo "  target:            ${TARGET}"
@@ -185,7 +191,8 @@ package_release() {
     local release_dir="${DIST_DIR}/nu-${version}-${TARGET}"
     local release_root
     release_root=$(readlink -f "$REPO_ROOT")
-    local target_dir="${release_root}/target/${TARGET}/release"
+    local target_dir
+    target_dir=$(release_target_dir)
 
     if [[ ! -f "${target_dir}/nu.exe" ]]; then
         die "missing build artifact: ${target_dir}/nu.exe"
@@ -230,6 +237,27 @@ package_release() {
     echo "Done. Copy ${release_dir} (or the zip) to Windows 7 and add it to PATH."
 }
 
+release_target_dir() {
+    local base="${CARGO_TARGET_DIR:-${REPO_ROOT}/target}"
+    echo "${base}/${TARGET}/release"
+}
+
+verify_no_combase() {
+    local nu_exe
+    nu_exe="$(release_target_dir)/nu.exe"
+
+    if [[ ! -f "$nu_exe" ]]; then
+        die "missing build artifact for verification: ${nu_exe}"
+    fi
+
+    echo "Verifying ${nu_exe} does not import combase.dll..."
+    if objdump -p "$nu_exe" | rg -q 'combase\.dll'; then
+        die "nu.exe still imports combase.dll (likely windows 0.62 via sysinfo or another dep); check with: objdump -p ${nu_exe} | rg 'combase|ole32'"
+    fi
+
+    echo "OK: no combase.dll import"
+}
+
 build_release() {
     echo "---------------------------------------------------------------"
     echo "Building Nushell for ${TARGET}"
@@ -255,6 +283,7 @@ main() {
     version=$(get_version)
 
     build_release
+    verify_no_combase
     package_release "$version"
 }
 
