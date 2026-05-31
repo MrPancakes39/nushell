@@ -60,9 +60,9 @@ nix = { workspace = true, default-features = false, features = ["signal"] }
 
 [target.'cfg(windows)'.dependencies]
 dirs-sys = { workspace = true }
-# Match dirs-sys's windows-sys so FOLDERID_* GUID types align with known_folder().
-# Include os_pipe's Win32 features so os_pipe unifies onto this version (not 0.45).
-windows-sys = { version = "0.59.0", features = [
+# Win32_UI_Shell: FOLDERID_* for dirs_sys::known_folder in eval_const.rs
+# Other Win32_* features: optional os_pipe unification off older windows-sys
+windows-sys = { workspace = true, features = [
   "Win32_UI_Shell",
   "Win32_Foundation",
   "Win32_System_Pipes",
