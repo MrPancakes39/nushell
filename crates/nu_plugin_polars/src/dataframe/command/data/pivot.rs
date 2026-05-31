@@ -6,7 +6,7 @@ use nu_protocol::{
 
 use polars::{
     df,
-    frame::DataFrame,
+    frame::{DataFrame, PivotColumnNaming},
     prelude::{Expr, PlSmallStr, Selector, element},
 };
 
@@ -304,6 +304,7 @@ fn command_lazy(
             agg,
             maintain_order,
             separator,
+            PivotColumnNaming::Auto,
         )
         .into();
 

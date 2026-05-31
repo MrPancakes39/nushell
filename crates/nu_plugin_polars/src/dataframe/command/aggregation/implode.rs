@@ -71,7 +71,7 @@ fn command_expr(
     call: &EvaluatedCall,
     expr: NuExpression,
 ) -> Result<PipelineData, ShellError> {
-    let res: NuExpression = expr.into_polars().implode().into();
+    let res: NuExpression = expr.into_polars().implode(false).into();
     res.to_pipeline_data(plugin, engine, call.head)
 }
 

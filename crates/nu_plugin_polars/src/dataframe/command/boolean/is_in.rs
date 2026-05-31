@@ -215,7 +215,7 @@ fn command_expr(
                     span: call.head,
                 })
             } else {
-                Ok(lit(list).implode())
+                Ok(lit(list).implode(false))
             }
         })?;
 

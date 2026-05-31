@@ -181,7 +181,7 @@ fn get_col_name(expr: &Expr) -> Option<String> {
             | polars::prelude::AggExpr::First(e)
             | polars::prelude::AggExpr::Last(e)
             | polars::prelude::AggExpr::Mean(e)
-            | polars::prelude::AggExpr::Implode(e)
+            | polars::prelude::AggExpr::Implode { input: e, .. }
             | polars::prelude::AggExpr::Count { input: e, .. }
             | polars::prelude::AggExpr::Sum(e)
             | polars::prelude::AggExpr::AggGroups(e)

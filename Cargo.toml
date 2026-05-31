@@ -141,7 +141,7 @@ bytesize = "2.3.1"
 byteyarn = "0.5"
 calamine = "0.35"
 chardetng = "0.1.17"
-chrono = { default-features = false, version = "0.4.41" } # polars is requiring <= 0.4.41
+chrono = { default-features = false, version = "0.4.42" }
 chrono-humanize = "0.2.3"
 chrono-tz = "0.10"
 crossbeam-channel = "0.5.15"
@@ -464,6 +464,33 @@ bench = false
 # Temporary: dirs 6 fix for x86_64-win7-windows-msvc linking (windows-sys 0.48).
 # Remove when upstream fff publishes or merges the dirs bump.
 fff-search = { git = "https://github.com/MrPancakes39/fff.git", branch = "win7-dirs-6" }
+# Temporary: polars 0.53.0 uses private core::unicode on recent nightlies.
+# Upstream fix: pola-rs/polars#27145 (rev c9d4a10). All polars-* patched together
+# so chrono ^0.4.42 and other workspace deps stay consistent.
+# Remove when upgrading to a crates.io polars release that includes the fix.
+polars = { git = "https://github.com/pola-rs/polars", rev = "c9d4a10a603c62108913556699f86a5ef9aba3d3" }
+polars-arrow = { git = "https://github.com/pola-rs/polars", rev = "c9d4a10a603c62108913556699f86a5ef9aba3d3" }
+polars-buffer = { git = "https://github.com/pola-rs/polars", rev = "c9d4a10a603c62108913556699f86a5ef9aba3d3" }
+polars-compute = { git = "https://github.com/pola-rs/polars", rev = "c9d4a10a603c62108913556699f86a5ef9aba3d3" }
+polars-core = { git = "https://github.com/pola-rs/polars", rev = "c9d4a10a603c62108913556699f86a5ef9aba3d3" }
+polars-dtype = { git = "https://github.com/pola-rs/polars", rev = "c9d4a10a603c62108913556699f86a5ef9aba3d3" }
+polars-error = { git = "https://github.com/pola-rs/polars", rev = "c9d4a10a603c62108913556699f86a5ef9aba3d3" }
+polars-expr = { git = "https://github.com/pola-rs/polars", rev = "c9d4a10a603c62108913556699f86a5ef9aba3d3" }
+polars-io = { git = "https://github.com/pola-rs/polars", rev = "c9d4a10a603c62108913556699f86a5ef9aba3d3" }
+polars-json = { git = "https://github.com/pola-rs/polars", rev = "c9d4a10a603c62108913556699f86a5ef9aba3d3" }
+polars-lazy = { git = "https://github.com/pola-rs/polars", rev = "c9d4a10a603c62108913556699f86a5ef9aba3d3" }
+polars-mem-engine = { git = "https://github.com/pola-rs/polars", rev = "c9d4a10a603c62108913556699f86a5ef9aba3d3" }
+polars-ops = { git = "https://github.com/pola-rs/polars", rev = "c9d4a10a603c62108913556699f86a5ef9aba3d3" }
+polars-parquet = { git = "https://github.com/pola-rs/polars", rev = "c9d4a10a603c62108913556699f86a5ef9aba3d3" }
+polars-plan = { git = "https://github.com/pola-rs/polars", rev = "c9d4a10a603c62108913556699f86a5ef9aba3d3" }
+polars-row = { git = "https://github.com/pola-rs/polars", rev = "c9d4a10a603c62108913556699f86a5ef9aba3d3" }
+polars-schema = { git = "https://github.com/pola-rs/polars", rev = "c9d4a10a603c62108913556699f86a5ef9aba3d3" }
+polars-sql = { git = "https://github.com/pola-rs/polars", rev = "c9d4a10a603c62108913556699f86a5ef9aba3d3" }
+polars-stream = { git = "https://github.com/pola-rs/polars", rev = "c9d4a10a603c62108913556699f86a5ef9aba3d3" }
+polars-time = { git = "https://github.com/pola-rs/polars", rev = "c9d4a10a603c62108913556699f86a5ef9aba3d3" }
+polars-utils = { git = "https://github.com/pola-rs/polars", rev = "c9d4a10a603c62108913556699f86a5ef9aba3d3" }
+# Required by patched polars-io (CRC64NVME checksum support).
+object_store = { git = "https://github.com/kdn36/arrow-rs-object-store", branch = "feat_checksum_crc64" }
 # reedline = { git = "https://github.com/nushell/reedline", branch = "main" }
 # nu-ansi-term = { git = "https://github.com/nushell/nu-ansi-term.git", branch = "main" }
 
