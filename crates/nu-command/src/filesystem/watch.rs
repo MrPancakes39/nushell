@@ -6,9 +6,9 @@ use std::{
 
 use itertools::Either;
 use notify_debouncer_full::{
-    DebouncedEvent, Debouncer, FileIdMap, new_debouncer,
+    DebouncedEvent, Debouncer, RecommendedCache, new_debouncer,
     notify::{
-        self, EventKind, RecommendedWatcher, RecursiveMode, Watcher,
+        self, EventKind, RecommendedWatcher, RecursiveMode,
         event::{DataChange, ModifyKind, RenameMode},
     },
 };
@@ -176,20 +176,20 @@ impl Command for Watch {
 
         let iter = {
             let (tx, rx) = channel();
-            let mut debouncer = new_debouncer(debounce_duration, None, tx)
-                .and_then(|mut debouncer| {
-                    debouncer.watcher().watch(&path, recursive_mode)?;
-                    Ok(debouncer)
-                })
-                .map_err(|err| {
-                    ShellError::Generic(GenericError::new(
-                        "Failed to create watcher",
-                        err.to_string(),
-                        call.head,
-                    ))
-                })?;
-            // need to cache to make sure that rename event works.
-            debouncer.cache().add_root(&path, recursive_mode);
+            let mut debouncer = new_debouncer(debounce_duration, None, tx).map_err(|err| {
+                ShellError::Generic(GenericError::new(
+                    "Failed to create watcher",
+                    err.to_string(),
+                    call.head,
+                ))
+            })?;
+            debouncer.watch(&path, recursive_mode).map_err(|err| {
+                ShellError::Generic(GenericError::new(
+                    "Failed to create watcher",
+                    err.to_string(),
+                    call.head,
+                ))
+            })?;
             WatchIterator::new(debouncer, rx, engine_state.signals().clone())
         };
 
@@ -404,14 +404,14 @@ impl TryFrom<DebouncedEvent> for WatchEvent {
 
 struct WatchIterator {
     /// Debouncer needs to be kept alive for `rx` to keep receiving events.
-    _debouncer: Debouncer<RecommendedWatcher, FileIdMap>,
+    _debouncer: Debouncer<RecommendedWatcher, RecommendedCache>,
     rx: Option<Receiver<Result<Vec<DebouncedEvent>, Vec<notify::Error>>>>,
     signals: Signals,
 }
 
 impl WatchIterator {
     fn new(
-        debouncer: Debouncer<RecommendedWatcher, FileIdMap>,
+        debouncer: Debouncer<RecommendedWatcher, RecommendedCache>,
         rx: Receiver<Result<Vec<DebouncedEvent>, Vec<notify::Error>>>,
         signals: Signals,
     ) -> Self {
