@@ -3,6 +3,10 @@
 # statically link the CRT so users don't have to install it
 rustflags = ["-C", "link-args=-stack:10000000", "-C", "target-feature=+crt-static"]
 
+[target.x86_64-win7-windows-msvc]
+# statically link the CRT so users don't have to install it on Win7
+rustflags = ["-C", "link-args=-stack:10000000", "-C", "target-feature=+crt-static"]
+
 # keeping this but commentting out in case we need them in the future
 
 # set a 2 gb stack size (0x80000000 = 2147483648 bytes = 2 GB)
