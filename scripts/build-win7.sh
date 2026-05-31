@@ -4,13 +4,13 @@
 # directory ready to copy to a Win7 machine.
 #
 # Prerequisites:
-#   rustup + nightly toolchain (NIGHTLY_TOOLCHAIN, default: nightly)
-#   rust-src component: rustup +nightly component add rust-src
+#   rustup + nightly toolchain (NIGHTLY_TOOLCHAIN, default: nightly-2026-04-01)
+#   rust-src component: rustup +nightly-2026-04-01 component add rust-src
 #   cargo-xwin and xwin on PATH
 #   curl or wget, and unzip (for bundling less.exe)
 #
 # Environment variables:
-#   NIGHTLY_TOOLCHAIN  - rustup toolchain name (default: nightly)
+#   NIGHTLY_TOOLCHAIN  - rustup toolchain name (default: nightly-2026-04-01)
 #   TARGET             - cross-compile target (default: x86_64-win7-windows-msvc)
 #   DIST_DIR           - output parent directory (default: dist/)
 #   CARGO_TARGET_DIR   - passed through to cargo if set
@@ -25,7 +25,7 @@ set -euo pipefail
 DIR=$(readlink -f "$(dirname "${BASH_SOURCE[0]}")")
 REPO_ROOT=$(dirname "$DIR")
 
-NIGHTLY_TOOLCHAIN="${NIGHTLY_TOOLCHAIN:-nightly}"
+NIGHTLY_TOOLCHAIN="${NIGHTLY_TOOLCHAIN:-nightly-2026-04-01}"
 TARGET="${TARGET:-x86_64-win7-windows-msvc}"
 DIST_DIR="${DIST_DIR:-dist}"
 
