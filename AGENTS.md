@@ -16,6 +16,11 @@
 - Make sure you use CARGO_TARGET_DIR to find where binaries are built.
 - See [rust_style.md](rust_style.md), [FAQ.md](FAQ.md), [HOWTOS.md](HOWTOS.md)
 
+## Windows path resolution
+
+- **Do not use environment variables** (e.g. `ProgramData`, `USERPROFILE`, `HOME`) to resolve Windows system or profile paths when a proper OS API exists. Env vars are user-controlled and are a security footgun for autoload, config, and data-directory logic.
+- Use `SHGetKnownFolderPath` via `dirs_sys::known_folder_*` (or equivalent) instead. On Win7, keep `dirs-sys` on the patched `patches/dirs-sys` fork so `CoTaskMemFree` links to `ole32.dll`, not `combase.dll`.
+
 ## PR requirements
 
 - **When creating a pull request, you MUST follow the PR template in `.github/pull_request_template.md`.**
